@@ -35,4 +35,5 @@
 - Dataset can be found here: http://preprocessed-connectomes-project.org/adhd200/index.html
 
 
-
+> python -m venv .venv
+> .venv\Scripts\activate
