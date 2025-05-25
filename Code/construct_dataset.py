@@ -1,5 +1,6 @@
 import re
 import os
+import pandas as pd
 
 def parse_dx(dx):
     if int(dx) == 0:
@@ -7,8 +8,11 @@ def parse_dx(dx):
     else:
         return 1
     
-base_dir = "../data"
-dataset_dir = "../data/model_data"
+# base_dir = "../data"
+# dataset_dir = "../data/model_data"
+
+base_dir = r"D:/adhd-fmri"
+dataset_dir = r"D:/adhd-fmri/model_data"  
 
 files_list = []
 for file in os.listdir(dataset_dir):
@@ -21,8 +25,10 @@ for file in os.listdir(dataset_dir):
     files_list.append({"ScanDir ID": file_id, "Image": file} )
 
 images_df = pd.DataFrame(files_list)
+tsv_path = r"D:\Joe Workspace\Codespace\Github\Diagnosing-ADHD-With-ConvLSTM\References\adhd200_preprocessed_phenotypics.tsv"
+references_path = r"D:\Joe Workspace\Codespace\Github\Diagnosing-ADHD-With-ConvLSTM\References"
 
-adhd_info = pd.read_csv("../references/adhd200_preprocessed_phenotypics.tsv", delimiter="\t")[['ScanDir ID','DX']]
+adhd_info = pd.read_csv(tsv_path, delimiter="\t")[['ScanDir ID','DX']]
 
 model_data = adhd_info.merge(images_df, on='ScanDir ID')
 
@@ -32,4 +38,4 @@ for index,row in model_data.iterrows():
 
 model_data['DX'] = model_data['DX'].apply(parse_dx)
 
-model_data.to_csv(os.path.join("../references", "model_data.csv"), index=False)
+model_data.to_csv(os.path.join(references_path, "model_data.csv"), index=False)
